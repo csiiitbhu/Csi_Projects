@@ -45,7 +45,7 @@ const Footer = () => {
 
     gsap.set(img, { 
       opacity: 0, 
-      y: -100, 
+      y: -80, 
       scale: 0.8, 
       rotate: -45,
       filter: "none"
@@ -53,13 +53,13 @@ const Footer = () => {
 
     gsap.set(layers, {
       opacity: 0,
-      scale: 0,
+      scale: 1, // All layers same scale
       rotation: 0,
       transformOrigin: "center center"
     });
 
     gsap.set(textContent, {
-      zIndex: 50,
+      zIndex: 30,
       opacity: 1
     });
 
@@ -76,24 +76,19 @@ const Footer = () => {
           }
         });
 
-
+        // All layers have the same position and scale, only rotation differs
         layers.forEach((layer, index) => {
           const delay = index * 0.08;
-          const rotation = (index % 2 === 0) ? 5 : -5;
-          const scale = 1 + (index * 0.1);
+          const rotation = (index % 2 === 0) ? 10 : -10; // Increased rotation for more visible effect
           
           containerAnimation.fromTo(layer, 
             {
               opacity: 0,
-              scale: 0,
               rotation: rotation * 2,
-              y: -30 - (index * 2)
             },
             {
-              opacity: 0.8 - (index * 0.15),
-              scale: scale,
+              opacity: 0.8 - (index * 0.2), // Slightly adjusted opacity for better layering
               rotation: rotation,
-              y: 0,
               duration: 0.6, 
               ease: "power2.out", 
               delay: delay
@@ -101,7 +96,6 @@ const Footer = () => {
             "-=0.3"
           );
         });
-
 
         containerAnimation.to(img, {
           opacity: 1,
@@ -112,7 +106,6 @@ const Footer = () => {
           ease: "back.out(1.4)", 
         }, "-=0.5");
 
-
         const floatingAnimation = gsap.timeline({ repeat: -1, yoyo: true });
         floatingAnimation.to([...layers, img], {
           y: -12, 
@@ -120,17 +113,15 @@ const Footer = () => {
           ease: "sine.inOut"
         });
 
-
+        // Continuous rotation animation for layers
         layers.forEach((layer, index) => {
           gsap.to(layer, {
-            rotation: (index % 2 === 0) ? 1.5 : -1.5, 
-            duration: 3 + (index * 0.3), 
+            rotation: `+=${(index % 2 === 0) ? 15 : -15}`, // Relative rotation
+            duration: 8 + (index * 1), // Slower rotation for more subtle effect
             repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut"
+            ease: "none"
           });
         });
-
 
         const glowAnimation = gsap.timeline({ repeat: -1, yoyo: true });
         glowAnimation.to(img, {
@@ -138,7 +129,6 @@ const Footer = () => {
           duration: 1.5,
           ease: "sine.inOut"
         });
-
 
         layers.forEach((layer, index) => {
           gsap.to(layer, {
@@ -164,16 +154,17 @@ const Footer = () => {
   }, [location.pathname]);
 
   return (
-    <section className="bg-black relative overflow-hidden rounded-tl-[3rem]">
+    
+    <section className="bg-black relative overflow-y-visible rounded-tl-[2rem] rounded-tr-[3rem]">
 
-      <footer className="bg-yellow-400 text-[#fffcfc] relative mt-10 -mb-8 ml-20 rounded-bl-[6rem] rounded-tr-[6rem] rounded-br-[6rem] rounded-tl-[6rem]">
+      <footer className="bg-yellow-400 text-[#fffcfc] relative bottom-10 -mb-8 max-sm:ml-5 sm:ml-20 rounded-bl-[6rem] rounded-tr-[6rem] rounded-br-[6rem] rounded-tl-[6rem]">
         <div ref={containerRef} className="flex flex-col md:flex-row justify-between items-center rounded-tr-[3rem] rounded-tl-[3rem] p-10 md:p-16 relative min-h-[400px]">
           
           <div 
             ref={textContentRef}
-            className="z-50 max-w-lg relative pointer-events-none"
+            className="z-30 max-w-lg relative pointer-events-none"
             style={{ 
-              zIndex: 50,
+              zIndex: 30,
               textShadow: '0 2px 4px rgba(0,0,0,0.3)'
             }}
           >
@@ -188,24 +179,25 @@ const Footer = () => {
         </div>
       </footer>
 
+      {/* All layers now have the exact same position and size */}
       <div 
         ref={addToLayers}
-        className="absolute right-3 sm:right-20 md:right-32 lg:right-40 top-1/4 w-32 h-32 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-[4rem] rotate-6 opacity-50"
+        className="absolute sm:right-28  max-sm:right-[28%] max-sm:top-[45%] top-[15%] w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 bg-gradient-to-br from-yellow-300 to-yellow-500 max-sm:rounded-[2rem] rounded-[4rem] opacity-50"
         style={{ zIndex: 1 }}
       />
       <div 
         ref={addToLayers}
-        className="absolute right-2 sm:right-22 md:right-34 lg:right-44 top-1/4 w-28 h-28 sm:w-44 sm:h-44 md:w-52 md:h-52 lg:w-60 lg:h-60 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-[3.5rem] -rotate-3 opacity-40"
+        className="absolute sm:right-28 max-sm:right-[28%] max-sm:top-[45%] top-[15%] w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 bg-gradient-to-br from-yellow-400 to-yellow-600 max-sm:rounded-[2rem] rounded-[4rem] opacity-40"
         style={{ zIndex: 2 }}
       />
       <div 
         ref={addToLayers}
-        className="absolute right-1 sm:right-24 md:right-36 lg:right-48 top-1/4 w-24 h-24 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 bg-gradient-to-br from-yellow-500 to-yellow-700 rounded-[3rem] rotate-2 opacity-30"
+        className="absolute sm:right-28  max-sm:right-[28%] max-sm:top-[45%] top-[15%] w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 bg-gradient-to-br from-yellow-500 to-yellow-700 max-sm:rounded-[2rem] rounded-[4rem] opacity-30"
         style={{ zIndex: 3 }}
       />
       <div 
         ref={addToLayers}
-        className="absolute -right-0 sm:right-26 md:right-38 lg:right-52 top-1/4 w-20 h-20 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-52 lg:h-52 bg-gradient-to-br from-purple-500 to-pink-600 rounded-[2.5rem] -rotate-6 opacity-25"
+        className="absolute sm:right-28  max-sm:right-[28%] max-sm:top-[45%] top-[15%] w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 bg-gradient-to-br from-purple-500 to-pink-600 max-sm:rounded-[2rem] rounded-[4rem] opacity-25"
         style={{ zIndex: 4 }}
       />
 
@@ -213,14 +205,14 @@ const Footer = () => {
         ref={bulbImg}
         src="/Images/csi-7.png"
         alt="Eco innovation illustration"
-        className="absolute -right-5 sm:right-18 md:right-30 lg:right-40 top-1/4 w-40 sm:w-56 md:w-72 lg:w-80 xl:w-[420px] h-auto z-10"
+        className="absolute sm:right-28 max-sm:right-[28%] max-sm:top-1/2 top-1/4 w-40 sm:w-56 md:w-72 lg:w-80 xl:w-[420px] h-auto z-10"
         style={{ zIndex: 10 }}
         onLoad={() => {
           setTimeout(() => ScrollTrigger.refresh(), 150);
         }}
       />
 
-      <div className="flex flex-col md:flex-row justify-between items-center px-8 py-6 border-t border-[#8B5CF6]/30 mt-8">
+      <div className="flex flex-col md:flex-row justify-between items-center px-8 py-6 border-t border-[#8B5CF6]/30 ">
         <div className="flex flex-col md:flex-row items-center gap-6 mb-4 md:mb-0">
           <span className="text-xl font-bold tracking-wide text-[#880163]">
             CSI
